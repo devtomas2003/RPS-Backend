@@ -6,10 +6,10 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cors());
 
-const server = app.listen(8080);
+const server = app.listen(process.env.PORT || 80);
 const io = socket(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
     }
 });
 
@@ -37,10 +37,14 @@ io.on('connection', function (socket) {
     });
     socket.on("join", (props) => {
         const partyInfo = JSON.parse(props);
+        const posicao = rooms.findIndex(x => x.code === partyInfo.code);
         if (rooms.findIndex(x => x.code === partyInfo.code) === -1) {
             socket.emit("partyError", 0);
-        } else {
-            const posicao = rooms.findIndex(x => x.code === partyInfo.code);
+        }else if(rooms[posicao].players.length === 2){
+            socket.emit("partyError", 1);
+        }else if(rooms[posicao].players[0].nome === partyInfo.playerName){
+            socket.emit("partyError", 2);
+        }else{
             const partyData = {
                 enemy: rooms[posicao].players[0].nome
             }
