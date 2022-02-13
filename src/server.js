@@ -89,7 +89,7 @@ io.on('connection', function (socket) {
             }else if(move.jogada === 1 && rooms[posicao].gamerSelected === 0){
                 resultRecevied = 1;
             }else if(move.jogada === 1 && rooms[posicao].gamerSelected === 2){
-                resultRecevied = 1;
+                resultRecevied = 2;
             }else if(move.jogada === 2 && rooms[posicao].gamerSelected === 0){
                 resultRecevied = 2;
             }else{
